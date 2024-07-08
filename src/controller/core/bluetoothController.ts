@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 02:05:17
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 02:20:08
+ * Last Modified: 2024-07-09 02:34:58
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -116,6 +116,11 @@ class BluetoothController {
                 reject();
             }
         });
+    }
+
+    public disconnectFromDevice() {
+        stores.bluetooth.gattServer?.disconnect();
+        stores.logger.log("用户操作断开连接", "warning");
     }
 }
 

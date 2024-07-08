@@ -4,7 +4,7 @@
  * Created Date: 2024-04-18 16:25:01
  * Author: Guoyi
  * -----
- * Last Modified: 2024-05-02 17:04:34
+ * Last Modified: 2024-07-09 02:36:49
  * Modified By:
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -12,12 +12,12 @@
  * ------------------------------------
  */
 
-import { useQuadcopterDetailsStore } from "../stores/quadcopterDetails";
+import { usebluetooth } from "../stores/quadcopterDetails";
 import { useLoggerStore } from "../stores/logger";
 import config from "../config";
 
 export async function submitPWMConfig() {
-    const quadcopterDetails = useQuadcopterDetailsStore();
+    const quadcopterDetails = usebluetooth();
     const logger = useLoggerStore();
 
     if (quadcopterDetails.gattServer && quadcopterDetails.gattServer.connected) {
