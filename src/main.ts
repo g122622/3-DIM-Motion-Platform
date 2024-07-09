@@ -2,7 +2,7 @@ import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 
 import { createApp, nextTick } from "vue";
-import "@/globalStyles.css";
+import "@/styles/globalStyles.css";
 import App from "@/App.vue";
 import { initPinia } from "./stores";
 import sleep from "@/utils/sleep";
@@ -11,8 +11,8 @@ import BluetoothController from "@/controller/core/bluetoothController";
 import { stores } from "@/stores";
 
 class Application {
-    initVue() {
-        const pinia = initPinia();
+    async initVue() {
+        const pinia = await initPinia();
         createApp(App).use(pinia).use(Antd).mount("#app");
     }
 

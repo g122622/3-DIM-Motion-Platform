@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 13:59:58
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 14:10:39
+ * Last Modified: 2024-07-09 18:35:13
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -17,7 +17,7 @@ import Characteristic from "../../types/characteristic";
 import { stores } from "@/stores";
 
 const PIDConfig: Characteristic = {
-    serviceUUID: stores.config.BluetoothConfig.GATT.remoteControlServiceUUID,
+    serviceUUID: 0xffe0,
     characteristicUUID: 0xffe1,
     async successHandler(characteristic) {
         // stores.config.PIDConfig.length个PID配置，每个配置含5个float数据，每个float数据4个字节

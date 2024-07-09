@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 00:58:21
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 01:54:08
+ * Last Modified: 2024-07-09 18:17:53
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -38,4 +38,3 @@ export function initPinia() {
 
     return pinia;
 }
-

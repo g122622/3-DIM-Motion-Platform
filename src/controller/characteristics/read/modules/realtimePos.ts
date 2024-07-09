@@ -4,7 +4,7 @@
  * Created Date: 2024-04-27 15:14:16
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 13:56:41
+ * Last Modified: 2024-07-09 18:34:39
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -17,7 +17,7 @@ import Characteristic from "../../types/characteristic";
 import { stores } from "@/stores";
 
 const realtimePos: Characteristic = {
-    serviceUUID: stores.config.BluetoothConfig.GATT.remoteInfoServiceUUID,
+    serviceUUID: 0x1022,
     characteristicUUID: 0x1023,
     async successHandler(characteristic) {
         const dataView = await characteristic.readValue();

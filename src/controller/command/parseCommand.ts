@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 16:02:05
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 17:58:16
+ * Last Modified: 2024-07-09 18:39:57
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -28,7 +28,6 @@ function extractGCodeParameters(gCode: string) {
     };
 
     while ((match = regex.exec(gCode)) !== null) {
-        console.log(match);
         // 使用组捕获来确保正确分配值
         const axis = match[1]; // 获取轴字符(X, Y, F)
         const value = parseFloat(match[2]) * multiplier; // 获取对应的数值
@@ -145,5 +144,5 @@ export default function parseCommand(strIn: string): Command[] {
             commandNumber++;
         }
     }
-    return [];
+    return ret;
 }
