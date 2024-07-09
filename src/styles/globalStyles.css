@@ -1,5 +1,5 @@
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 7px;
     filter: invert(var(--icon_invert));
     height: 12px;
 }

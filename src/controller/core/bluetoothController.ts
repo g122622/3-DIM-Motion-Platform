@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 02:05:17
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 14:33:44
+ * Last Modified: 2024-07-10 01:07:59
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -146,6 +146,10 @@ class BluetoothController {
 
     public async submitPIDConfig() {
         await this.writeCharacteristic(characteristicsToWrite[0]);
+    }
+
+    public async submitCommand() {
+        await this.writeCharacteristic(characteristicsToWrite[1]);
     }
 }
 
