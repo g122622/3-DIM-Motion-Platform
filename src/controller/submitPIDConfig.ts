@@ -4,7 +4,7 @@
  * Created Date: 2024-04-18 16:25:01
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 02:36:49
+ * Last Modified: 2024-07-09 13:40:58
  * Modified By:
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -22,7 +22,7 @@ export async function submitPIDConfig() {
 
     if (quadcopterDetails.gattServer && quadcopterDetails.gattServer.connected) {
         // 尝试获取characteristic
-        const service = await quadcopterDetails.gattServer?.getPrimaryService(config.remoteControllServiceUUID);
+        const service = await quadcopterDetails.gattServer?.getPrimaryService(config.remoteControlServiceUUID);
         const characteristic = await service?.getCharacteristic(0xffe1);
         if (characteristic) {
             const dataView = new DataView(new ArrayBuffer((4 * 3 + 2) * 4)); // 4个PID配置，每个配置含3个float数据，每个float数据4个字节

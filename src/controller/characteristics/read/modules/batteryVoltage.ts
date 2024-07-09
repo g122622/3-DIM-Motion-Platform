@@ -4,7 +4,7 @@
  * Created Date: 2024-04-27 15:14:31
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 02:37:29
+ * Last Modified: 2024-07-09 13:56:41
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -13,12 +13,11 @@
  */
 
 import noop from "@/utils/noop";
-import Characteristic from "../types/characteristic";
-import config from "@/config";
+import Characteristic from "../../types/characteristic";
 import { stores } from "@/stores";
 
 const batteryVoltage: Characteristic = {
-    serviceUUID: config.remoteInfoServiceUUID,
+    serviceUUID: stores.config.BluetoothConfig.GATT.remoteInfoServiceUUID,
     characteristicUUID: 0x1024,
     async successHandler(characteristic) {
         const dataView = await characteristic.readValue();

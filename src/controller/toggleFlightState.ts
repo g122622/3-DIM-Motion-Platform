@@ -4,7 +4,7 @@
  * Created Date: 2024-04-28 00:49:21
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 02:36:49
+ * Last Modified: 2024-07-09 13:40:58
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -22,7 +22,7 @@ export async function toggleFlightState(stateIn: number) {
 
     if (quadcopterDetails.gattServer && quadcopterDetails.gattServer.connected) {
         // 尝试获取characteristic
-        const service = await quadcopterDetails.gattServer?.getPrimaryService(config.remoteControllServiceUUID);
+        const service = await quadcopterDetails.gattServer?.getPrimaryService(config.remoteControlServiceUUID);
         const characteristic = await service?.getCharacteristic(0xffe2);
         if (characteristic) {
             const dataView = new DataView(new ArrayBuffer(4)); // 1个int，4字节

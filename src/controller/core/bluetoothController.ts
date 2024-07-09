@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 02:05:17
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 02:34:58
+ * Last Modified: 2024-07-09 14:33:44
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -13,7 +13,8 @@
  */
 
 import { stores } from "@/stores";
-import characteristics from "../characteristics";
+import characteristicsToRead from "../characteristics/read";
+import characteristicsToWrite from "../characteristics/write";
 import Characteristic from "../characteristics/types/characteristic";
 import sleep from "@/utils/sleep";
 
@@ -54,7 +55,7 @@ class BluetoothController {
     }
 
     private async startCharacteristicsScheduledQuery() {
-        characteristics.forEach(async (item: Characteristic) => {
+        characteristicsToRead.forEach(async (item: Characteristic) => {
             let characteristicCache: null | BluetoothRemoteGATTCharacteristic = null;
             while (1) {
                 if (stores.bluetooth.isConnected) {
@@ -72,7 +73,7 @@ class BluetoothController {
                         }
                     }
                 }
-                await sleep(item.queryInterval);
+                await sleep(item.queryInterval || 500);
             }
         });
     }
@@ -85,8 +86,8 @@ class BluetoothController {
                     stores.logger.log("设备和浏览器支持蓝牙");
                     // 显示蓝牙列表
                     const device = await navigator.bluetooth.requestDevice({
-                        filters: [{ services: [stores.config.BluetoothConfig.GATT.RCServiceUUID] }],
-                        optionalServices: [stores.config.BluetoothConfig.GATT.RCServiceUUID, 0x1022]
+                        filters: [{ services: [stores.config.BluetoothConfig.GATT.remoteControlServiceUUID] }],
+                        optionalServices: [stores.config.BluetoothConfig.GATT.remoteControlServiceUUID, 0x1022]
                     });
                     if (device && device.gatt) {
                         console.log("device", device);
@@ -101,9 +102,13 @@ class BluetoothController {
                         // 添加断开连接事件
                         // device.addEventListener("gattserverdisconnected", onDisconnected);
                         // 监听characteristic
-                        const service = await server.getPrimaryService(stores.config.BluetoothConfig.GATT.RCServiceUUID);
+                        const service = await server.getPrimaryService(
+                            stores.config.BluetoothConfig.GATT.remoteControlServiceUUID
+                        );
                         console.log("service", service);
-                        stores.logger.log(`gatt服务 0x${stores.config.BluetoothConfig.GATT.RCServiceUUID.toString(16)} 连接成功`);
+                        stores.logger.log(
+                            `gatt服务 0x${stores.config.BluetoothConfig.GATT.remoteControlServiceUUID.toString(16)} 连接成功`
+                        );
 
                         resolve();
                     } else {
@@ -121,6 +126,26 @@ class BluetoothController {
     public disconnectFromDevice() {
         stores.bluetooth.gattServer?.disconnect();
         stores.logger.log("用户操作断开连接", "warning");
+    }
+
+    public async writeCharacteristic(chrIn: Characteristic) {
+        if (stores.bluetooth.gattServer && stores.bluetooth.gattServer.connected) {
+            // 尝试获取characteristic
+            const service = await stores.bluetooth.gattServer?.getPrimaryService(chrIn.serviceUUID);
+            const characteristic = await service?.getCharacteristic(chrIn.characteristicUUID);
+            if (characteristic) {
+                chrIn.successHandler(characteristic);
+            } else {
+                // 获取失败
+                stores.logger.log("蓝牙chr获取失败，无法写入", "error");
+            }
+        } else {
+            stores.logger.log("蓝牙未连接或连接异常", "error");
+        }
+    }
+
+    public async submitPIDConfig() {
+        await this.writeCharacteristic(characteristicsToWrite[0]);
     }
 }
 
