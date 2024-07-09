@@ -8,7 +8,7 @@
 
             <a-button type="primary" @click="stores.bluetooth.bluetoothController.connectToDevice()"
                 v-if="!stores.bluetooth.isConnected">
-                <div class="innerText">📡连接无人机</div>
+                <div class="innerText">📡连接设备</div>
 
             </a-button>
             <a-button type="primary" @click="stores.bluetooth.bluetoothController.disconnectFromDevice()" v-else

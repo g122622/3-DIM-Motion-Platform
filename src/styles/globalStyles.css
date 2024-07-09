@@ -1,0 +1,39 @@
+::-webkit-scrollbar {
+    width: 12px;
+    filter: invert(var(--icon_invert));
+    height: 12px;
+}
+
+/* 正常情况下滑块的样式 */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .2);
+    border-radius: 20px;
+    filter: invert(var(--icon_invert));
+
+}
+
+/* 鼠标悬浮在该类指向的控件上时滑块的样式 */
+:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .2);
+    filter: invert(var(--icon_invert));
+    border-radius: 20px;
+}
+
+/* 鼠标悬浮在滑块上时滑块的样式 */
+::-webkit-scrollbar-thumb:hover {
+    filter: invert(var(--icon_invert));
+    background-color: rgba(0, 0, 0, .4);
+}
+
+/* 正常时候的主干部分 */
+::-webkit-scrollbar-track {
+    border-radius: 20px;
+    filter: invert(var(--icon_invert));
+    background-color: inherit;
+}
+
+/* 鼠标悬浮在滚动条上的主干部分 */
+::-webkit-scrollbar-track:hover {
+    filter: invert(var(--icon_invert));
+    background-color: inherit;
+}
