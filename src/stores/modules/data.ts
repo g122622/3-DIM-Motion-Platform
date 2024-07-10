@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 01:04:00
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 16:36:01
+ * Last Modified: 2024-07-10 17:03:46
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -31,5 +31,5 @@ export const useDataStore = defineStore("Data", {
         },
         commandList: [] as Command[],
         commandToSend: [] as Command[]
-    })
+    }),
 });

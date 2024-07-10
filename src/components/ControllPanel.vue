@@ -16,22 +16,57 @@
         <a-space>
             坐标偏移预处理器：
             X轴：
-            <a-input-number v-model:value="preprocessors.coordinateOffset.x" aria-placeholder="X轴偏移量：" suffix="mm"
-                style="width: 100px" />
+            <a-input-number v-model:value="stores.config.CommandConfig.preprocessors.coordinateOffset.x"
+                aria-placeholder="X轴偏移量：" addon-after="mm" style="width: 100px" />
             Y轴：
-            <a-input-number v-model:value="preprocessors.coordinateOffset.y" aria-placeholder="Y轴偏移量：" suffix="mm"
-                style="width: 100px" />
+            <a-input-number v-model:value="stores.config.CommandConfig.preprocessors.coordinateOffset.y"
+                aria-placeholder="Y轴偏移量：" addon-after="mm" style="width: 100px" />
+        </a-space>
+        <a-space>
+            坐标缩放预处理器：
+            X轴：
+            <a-input-number v-model:value="stores.config.CommandConfig.preprocessors.coordinateScale.x"
+                aria-placeholder="X轴缩放：" addon-after="倍" style="width: 100px" />
+            Y轴：
+            <a-input-number v-model:value="stores.config.CommandConfig.preprocessors.coordinateScale.y"
+                aria-placeholder="Y轴缩放：" addon-after="倍" style="width: 100px" />
         </a-space>
         <a-space>
             <a-button type="primary" @click="applyPreprocessors()">手动应用所有预处理器</a-button>
             <a-checkbox v-model:checked="autoApplyPreprocessors">自动应用所有预处理器</a-checkbox>
+        </a-space>
+        <a-space>
+            <a-checkbox v-model:checked="autoSavePreprocessorsConfig">自动保存预处理器配置</a-checkbox>
+        </a-space>
+
+        <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">系统状态:</h4>
+        <a-space>
+            实时坐标：
+            X轴：
+            <a-tag color="#2db7f5">X= {{ stores.data.realtimePos.x.toFixed(3) }}</a-tag>
+            Y轴：
+            <a-tag color="#2db7f5">Y= {{ stores.data.realtimePos.y.toFixed(3) }}</a-tag>
+            Z轴（落笔）：
+            <a-tag color="#2db7f5">Y= {{ stores.data.realtimePos.z.toFixed(3) }}</a-tag>
+        </a-space>
+        <a-space>
+            电源电压：
+            <a-tag color="#2db7f5">{{ stores.data.BMS.batteryVoltage.toFixed(3) }}V</a-tag>
+        </a-space>
+        <a-space>
+            当前执行指令编号：
+            <a-tag color="#2db7f5">{{ stores.data.commandCounter.currentCommandNumber }}</a-tag>
+        </a-space>
+        <a-space>
+            累计执行指令数量：
+            <a-tag color="#2db7f5">{{ stores.data.commandCounter.executedCommandCount }}</a-tag>
         </a-space>
     </a-space>
 </template>
 
 <script setup lang="ts">
 import { stores } from '@/stores';
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 
 function fillCommandList() {
     if (stores.data.commandToSend.length > 0) {
@@ -54,12 +89,7 @@ const clearCommandList = () => {
 }
 
 const autoApplyPreprocessors = ref(true);
-const preprocessors = reactive({
-    coordinateOffset: {
-        x: 0,
-        y: 0
-    }
-});
+const autoSavePreprocessorsConfig = true;
 
 const applyPreprocessors = () => {
     const commands = stores.data.commandToSend;
@@ -67,11 +97,15 @@ const applyPreprocessors = () => {
         const command = commands[i];
         if (command.opCode === 0 || command.opCode === 1) {
             if (typeof command.args[0] === 'number' && typeof command.args[1] === 'number') {
-                command.args[0] += preprocessors.coordinateOffset.x;
-                command.args[1] += preprocessors.coordinateOffset.y;
+                command.args[0] += stores.config.CommandConfig.preprocessors.coordinateOffset.x;
+                command.args[1] += stores.config.CommandConfig.preprocessors.coordinateOffset.y;
+
+                command.args[0] *= stores.config.CommandConfig.preprocessors.coordinateScale.x;
+                command.args[1] *= stores.config.CommandConfig.preprocessors.coordinateScale.y;
             }
         }
 
     }
 }
+
 </script>

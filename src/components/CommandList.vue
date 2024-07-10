@@ -9,7 +9,7 @@
                 }}, {{
                     item.args[2]?.toFixed(2) || 'null' }}</a-tag>
             <br />
-            <a-tag color="blue" style="margin-top: 10px;">{{ item.originalGcode }}</a-tag>
+            <a-tag color="blue" style="margin-top: 10px;">原始G代码：{{ item.originalGcode }}</a-tag>
         </div>
     </div>
 </template>

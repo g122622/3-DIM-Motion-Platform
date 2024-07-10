@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 01:12:00
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 23:44:38
+ * Last Modified: 2024-07-10 17:14:22
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -26,7 +26,18 @@ export const useConfigStore = defineStore("Config", {
             }
         },
         CommandConfig: {
-            batchSize: 16
+            batchSize: 16,
+            preprocessors: {
+                coordinateOffset: {
+                    x: 0,
+                    y: 0
+                },
+                coordinateScale: {
+                    x: 1,
+                    y: 1
+                }
+            }
         }
-    })
+    }),
+    persist: true
 });

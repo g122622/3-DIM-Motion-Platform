@@ -4,7 +4,7 @@
  * Created Date: 2024-03-05 13:57:19
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 02:25:14
+ * Last Modified: 2024-07-10 17:03:53
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -20,6 +20,6 @@ export const useBluetoothStore = defineStore("Bluetooth", {
         connectedTimeStr: "",
         isConnected: false,
         gattServer: null as BluetoothRemoteGATTServer | null,
-        bluetoothController: null as unknown as BluetoothController,
-    })
+        bluetoothController: null as unknown as BluetoothController
+    }),
 });
