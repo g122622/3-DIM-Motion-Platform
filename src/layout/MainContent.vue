@@ -1,9 +1,9 @@
 <template>
     <a-row style="height: 100%;">
-        <a-col :span="8">
+        <a-col :span="7">
             <CommandList />
         </a-col>
-        <a-col :span="10">
+        <a-col :span="11">
             <ControllPanel />
         </a-col>
         <a-col :span="6">

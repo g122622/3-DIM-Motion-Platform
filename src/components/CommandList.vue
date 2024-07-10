@@ -1,5 +1,8 @@
 <template>
-    <a-button>发送缓冲区大小: {{ stores.data.commandToSend.length }}</a-button>
+    <a-space>
+        <a-button>所有指令数: {{ stores.data.commandList.length }}</a-button>
+        <a-button>发送缓冲区大小: {{ stores.data.commandToSend.length }}</a-button>
+    </a-space>
     <div id="list">
         <div class="list-item" v-for="(item, index) in stores.data.commandToSend" :key="item.commandNumber">
             <a-tag color="#f50"># {{ index + 1 }}</a-tag>

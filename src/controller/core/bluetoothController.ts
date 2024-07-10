@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 02:05:17
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-10 01:07:59
+ * Last Modified: 2024-07-10 18:38:48
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -47,7 +47,7 @@ class BluetoothController {
                 stores.bluetooth.connectedTimeStr = `${hour}:${minute}:${second}`;
             } else {
                 stores.bluetooth.isConnected = false;
-                // gatt服务器解除引用
+                // GATT服务器解除引用
                 stores.bluetooth.gattServer = null;
                 stores.bluetooth.connectedTime = 0;
             }
@@ -97,7 +97,7 @@ class BluetoothController {
                         const server = await device.gatt.connect();
                         stores.bluetooth.gattServer = server;
                         console.log("server", server);
-                        stores.logger.log(`gatt服务器连接成功`);
+                        stores.logger.log(`GATT服务器连接成功`);
 
                         // 添加断开连接事件
                         // device.addEventListener("gattserverdisconnected", onDisconnected);
@@ -107,7 +107,7 @@ class BluetoothController {
                         );
                         console.log("service", service);
                         stores.logger.log(
-                            `gatt服务 0x${stores.config.BluetoothConfig.GATT.remoteControlServiceUUID.toString(16)} 连接成功`
+                            `GATT服务 0x${stores.config.BluetoothConfig.GATT.remoteControlServiceUUID.toString(16)} 连接成功`
                         );
 
                         resolve();

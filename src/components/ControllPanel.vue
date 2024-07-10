@@ -2,14 +2,21 @@
     <a-space direction="vertical">
         <h4 style="margin-bottom: 10px; font-weight: bold">缓冲区操作:</h4>
         <a-space>
-            <a-button type="primary" @click="fillCommandList()">从总队列中填充</a-button>
-            <a-input-number v-model:value="stores.config.CommandConfig.batchSize" aria-placeholder="任务批次大小：" suffix="条"
-                style="width: 100px" type="number" />
-            <a-button type="primary" @click="clearCommandList()" danger>手动清空发送缓冲区</a-button>
+            <a-button type="primary" @click="fillCommandList()">📄从总队列中填充</a-button>
+            <a-input-number v-model:value="stores.config.CommandConfig.batchSize" aria-placeholder="任务批次大小："
+                addon-after="条" style="width: 100px" type="number" />
+            <a-button type="primary" @click="clearCommandList()" danger>🗑︎手动清空发送缓冲区</a-button>
         </a-space>
         <a-space>
-            <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitCommand()">发送命令batch
+            <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitCommand()">
+                🚀发送命令batch
             </a-button>
+        </a-space>
+        <a-space>
+            <a-checkbox v-model:checked="stores.config.CommandConfig.autosend.autoSend">自动发送命令</a-checkbox>
+            自动发送检查间隔：
+            <a-input-number v-model:value="stores.config.CommandConfig.autosend.autoSendCheckInterval"
+                aria-placeholder="自动发送检查间隔：" addon-after="ms" style="width: 100px" type="number" />
         </a-space>
 
         <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">命令预处理:</h4>
@@ -32,11 +39,64 @@
                 aria-placeholder="Y轴缩放：" addon-after="倍" style="width: 100px" />
         </a-space>
         <a-space>
-            <a-button type="primary" @click="applyPreprocessors()">手动应用所有预处理器</a-button>
-            <a-checkbox v-model:checked="autoApplyPreprocessors">自动应用所有预处理器</a-checkbox>
+            XY反转预处理器：
+            <a-checkbox v-model:checked="stores.config.CommandConfig.preprocessors.coordinateReverse">
+                启用XY反转
+            </a-checkbox>
         </a-space>
         <a-space>
+            <a-button type="primary" @click="applyPreprocessors()">手动应用所有预处理器</a-button>
+            <a-checkbox v-model:checked="autoApplyPreprocessors">自动应用所有预处理器</a-checkbox>
             <a-checkbox v-model:checked="autoSavePreprocessorsConfig">自动保存预处理器配置</a-checkbox>
+        </a-space>
+
+        <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">设备配置:</h4>
+        <a-space>
+            X轴PWM参数：
+            Kp
+            <a-input-number v-model:value="stores.config.PIDConfig[0].Kp" aria-placeholder="Kp：" style="width: 50px"
+                type="number" />
+            Ki
+            <a-input-number v-model:value="stores.config.PIDConfig[0].Ki" aria-placeholder="Ki：" style="width: 50px"
+                type="number" />
+            Kd
+            <a-input-number v-model:value="stores.config.PIDConfig[0].Kd" aria-placeholder="Kd：" style="width: 50px"
+                type="number" />
+            积分限幅
+            <a-input-number v-model:value="stores.config.PIDConfig[0].IntegralLimit" aria-placeholder="积分限幅："
+                style="width: 50px" type="number" />
+            总量限幅
+            <a-input-number v-model:value="stores.config.PIDConfig[0].TotalLimit" aria-placeholder="总量限幅："
+                style="width: 50px" type="number" />
+        </a-space>
+        <a-space>
+            Y轴PWM参数：
+            Kp
+            <a-input-number v-model:value="stores.config.PIDConfig[1].Kp" aria-placeholder="Kp：" style="width: 50px"
+                type="number" />
+            Ki
+            <a-input-number v-model:value="stores.config.PIDConfig[1].Ki" aria-placeholder="Ki：" style="width: 50px"
+                type="number" />
+            Kd
+            <a-input-number v-model:value="stores.config.PIDConfig[1].Kd" aria-placeholder="Kd：" style="width: 50px"
+                type="number" />
+            积分限幅
+            <a-input-number v-model:value="stores.config.PIDConfig[1].IntegralLimit" aria-placeholder="积分限幅："
+                style="width: 50px" type="number" />
+            总量限幅
+            <a-input-number v-model:value="stores.config.PIDConfig[1].TotalLimit" aria-placeholder="总量限幅："
+                style="width: 50px" type="number" />
+        </a-space>
+        <a-space>
+            抬笔角度：
+            <a-input-number v-model:value="stores.config.PenConfig.liftAngle" aria-placeholder="抬笔角度：" addon-after="度"
+                style="width: 100px" type="number" />
+            落笔角度：
+            <a-input-number v-model:value="stores.config.PenConfig.dropAngle" aria-placeholder="落笔角度：" addon-after="度"
+                style="width: 100px" type="number" />
+            <a-button type="primary" danger @click="">
+                🚀提交
+            </a-button>
         </a-space>
 
         <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">系统状态:</h4>
@@ -46,8 +106,8 @@
             <a-tag color="#2db7f5">X= {{ stores.data.realtimePos.x.toFixed(3) }}</a-tag>
             Y轴：
             <a-tag color="#2db7f5">Y= {{ stores.data.realtimePos.y.toFixed(3) }}</a-tag>
-            Z轴（落笔）：
-            <a-tag color="#2db7f5">Y= {{ stores.data.realtimePos.z.toFixed(3) }}</a-tag>
+            Z轴/笔尖状态：
+            <a-tag color="#2db7f5">Z= {{ stores.data.realtimePos.z.toFixed(3) }}</a-tag>
         </a-space>
         <a-space>
             电源电压：
@@ -56,8 +116,6 @@
         <a-space>
             当前执行指令编号：
             <a-tag color="#2db7f5">{{ stores.data.commandCounter.currentCommandNumber }}</a-tag>
-        </a-space>
-        <a-space>
             累计执行指令数量：
             <a-tag color="#2db7f5">{{ stores.data.commandCounter.executedCommandCount }}</a-tag>
         </a-space>
@@ -66,7 +124,7 @@
 
 <script setup lang="ts">
 import { stores } from '@/stores';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 function fillCommandList() {
     if (stores.data.commandToSend.length > 0) {
@@ -102,10 +160,27 @@ const applyPreprocessors = () => {
 
                 command.args[0] *= stores.config.CommandConfig.preprocessors.coordinateScale.x;
                 command.args[1] *= stores.config.CommandConfig.preprocessors.coordinateScale.y;
+
+                if (stores.config.CommandConfig.preprocessors.coordinateReverse) {
+                    const temp = command.args[0];
+                    command.args[0] = command.args[1];
+                    command.args[1] = temp;
+                }
             }
         }
 
     }
 }
+
+onMounted(() => {
+    stores.config.CommandConfig.autosend.autoSend = false;
+    setInterval(() => {
+        if (stores.config.CommandConfig.autosend.autoSend) {
+            clearCommandList();
+            fillCommandList();
+            stores.bluetooth.bluetoothController.submitCommand();
+        }
+    }, stores.config.CommandConfig.autosend.autoSendCheckInterval)
+})
 
 </script>

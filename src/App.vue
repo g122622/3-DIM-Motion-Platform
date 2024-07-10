@@ -3,7 +3,7 @@
         <Sider />
         <a-layout>
             <Header />
-            <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
+            <a-layout-content :style="{ margin: '7px 0px', padding: '15px', background: '#fff', minHeight: '280px' }">
                 <MainContent />
             </a-layout-content>
         </a-layout>
