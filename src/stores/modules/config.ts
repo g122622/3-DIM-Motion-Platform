@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 01:12:00
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-10 23:35:38
+ * Last Modified: 2024-07-11 13:46:08
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -16,8 +16,8 @@ import { defineStore } from "pinia";
 export const useConfigStore = defineStore("Config", {
     state: () => ({
         PIDConfig: [
-            { name: "X", Kp: 1, Ki: 0, Kd: 5, IntegralLimit: 100, TotalLimit: 100 },
-            { name: "Y", Kp: 1, Ki: 0, Kd: 5, IntegralLimit: 100, TotalLimit: 100 }
+            { name: "X", Kp: 3, Ki: 0.001, Kd: 50, IntegralLimit: 10, TotalLimit: 50 },
+            { name: "Y", Kp: 3, Ki: 0.001, Kd: 50, IntegralLimit: 10, TotalLimit: 50 }
         ],
         BluetoothConfig: {
             GATT: {
@@ -47,8 +47,10 @@ export const useConfigStore = defineStore("Config", {
         },
         PenConfig: {
             liftAngle: 91,
-            dropAngle: 97
-        }
+            dropAngle: 97,
+            currentAngle: 91
+        },
+        autoSendDevConfig: true
     }),
     persist: true
 });

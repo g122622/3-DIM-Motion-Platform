@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 02:05:17
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-10 18:38:48
+ * Last Modified: 2024-07-11 00:11:22
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -150,6 +150,10 @@ class BluetoothController {
 
     public async submitCommand() {
         await this.writeCharacteristic(characteristicsToWrite[1]);
+    }
+
+    public async submitPenConfig() {
+        await this.writeCharacteristic(characteristicsToWrite[2]);
     }
 }
 

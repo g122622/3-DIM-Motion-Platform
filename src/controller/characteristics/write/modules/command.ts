@@ -4,7 +4,7 @@
  * Created Date: 2024-07-10 00:45:18
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-10 01:07:59
+ * Last Modified: 2024-07-11 00:05:43
  * Modified By:
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -16,7 +16,7 @@ import noop from "@/utils/noop";
 import Characteristic from "../../types/characteristic";
 import { stores } from "@/stores";
 
-const PIDConfig: Characteristic = {
+const command: Characteristic = {
     serviceUUID: 0xffe0,
     characteristicUUID: 0xffe3,
     async successHandler(characteristic) {
@@ -39,4 +39,4 @@ const PIDConfig: Characteristic = {
     queryInterval: 500
 };
 
-export default PIDConfig;
+export default command;

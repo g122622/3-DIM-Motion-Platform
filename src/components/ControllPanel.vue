@@ -11,8 +11,6 @@
             <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitCommand()">
                 🚀发送命令batch
             </a-button>
-        </a-space>
-        <a-space>
             <a-checkbox v-model:checked="stores.config.CommandConfig.autosend.autoSend">自动发送命令</a-checkbox>
             自动发送检查间隔：
             <a-input-number v-model:value="stores.config.CommandConfig.autosend.autoSendCheckInterval"
@@ -50,9 +48,9 @@
             <a-checkbox v-model:checked="autoSavePreprocessorsConfig">自动保存预处理器配置</a-checkbox>
         </a-space>
 
-        <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">设备配置:</h4>
+        <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold;">设备配置:</h4>
         <a-space>
-            X轴PWM参数：
+            X轴PID参数：
             Kp
             <a-input-number v-model:value="stores.config.PIDConfig[0].Kp" aria-placeholder="Kp：" style="width: 50px"
                 type="number" />
@@ -70,7 +68,7 @@
                 style="width: 50px" type="number" />
         </a-space>
         <a-space>
-            Y轴PWM参数：
+            Y轴PID参数：
             Kp
             <a-input-number v-model:value="stores.config.PIDConfig[1].Kp" aria-placeholder="Kp：" style="width: 50px"
                 type="number" />
@@ -88,13 +86,25 @@
                 style="width: 50px" type="number" />
         </a-space>
         <a-space>
-            抬笔角度：
+            <a-button type="primary" @click="">
+                从设备读取PID配置
+            </a-button>
+            <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitPIDConfig()">
+                🚀提交PID配置
+            </a-button>
+            <a-checkbox v-model:checked="stores.config.autoSendDevConfig">BLE连接后自动提交所有设备配置</a-checkbox>
+        </a-space>
+        <a-space>
+            抬笔：
             <a-input-number v-model:value="stores.config.PenConfig.liftAngle" aria-placeholder="抬笔角度：" addon-after="度"
                 style="width: 100px" type="number" />
-            落笔角度：
+            落笔：
             <a-input-number v-model:value="stores.config.PenConfig.dropAngle" aria-placeholder="落笔角度：" addon-after="度"
                 style="width: 100px" type="number" />
-            <a-button type="primary" danger @click="">
+            当前：
+            <a-input-number v-model:value="stores.config.PenConfig.currentAngle" aria-placeholder="当前角度："
+                addon-after="度" style="width: 100px" type="number" />
+            <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitPenConfig()">
                 🚀提交
             </a-button>
         </a-space>
@@ -124,7 +134,7 @@
 
 <script setup lang="ts">
 import { stores } from '@/stores';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 function fillCommandList() {
     if (stores.data.commandToSend.length > 0) {
@@ -174,6 +184,8 @@ const applyPreprocessors = () => {
 
 onMounted(() => {
     stores.config.CommandConfig.autosend.autoSend = false;
+
+    // 自动发送命令
     setInterval(() => {
         if (stores.config.CommandConfig.autosend.autoSend) {
             clearCommandList();
@@ -181,6 +193,16 @@ onMounted(() => {
             stores.bluetooth.bluetoothController.submitCommand();
         }
     }, stores.config.CommandConfig.autosend.autoSendCheckInterval)
+
+    // 监听蓝牙连接状态
+    watch(() => stores.bluetooth.isConnected, (newVal) => {
+        if (newVal && stores.config.autoSendDevConfig) {
+            setTimeout(() => {
+                stores.bluetooth.bluetoothController.submitPIDConfig();
+                stores.bluetooth.bluetoothController.submitPenConfig();
+            }, 1000);
+        }
+    })
 })
 
 </script>
