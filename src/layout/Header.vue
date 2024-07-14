@@ -21,23 +21,25 @@ import { stores } from '@/stores';
 
 onMounted(() => {
     document.getElementById('file-input')?.addEventListener('change', function (event) {
-        let file = event?.target?.files[0]; // 获取选中的文件
-        if (!file) {
-            alert("请选择一个文件！");
-            return;
+        if (event && event.target) {
+            let file = (event.target as HTMLInputElement).files![0]; // 获取选中的文件
+            if (!file) {
+                alert("请选择一个文件！");
+                return;
+            }
+
+            // 使用FileReader读取文件内容
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                // 文件读取成功，e.target.result即为文件内容
+                let content = e.target!.result;
+                stores.data.commandList = [...stores.data.commandList, ...parseCommand(content as string)]
+            };
+
+            // 以文本格式读取文件
+            reader.readAsText(file);
         }
-
-        // 使用FileReader读取文件内容
-        let reader = new FileReader();
-
-        reader.onload = function (e) {
-            // 文件读取成功，e.target.result即为文件内容
-            let content = e.target.result;
-            stores.data.commandList = [...stores.data.commandList, ...parseCommand(content as string)]
-        };
-
-        // 以文本格式读取文件
-        reader.readAsText(file);
     });
 })
 

@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 02:05:17
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-11 00:11:22
+ * Last Modified: 2024-07-13 00:44:24
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -26,7 +26,7 @@ class BluetoothController {
     private async initAll() {
         this.startBluetoothStatusScheduledQuery();
         await sleep(500);
-        this.startCharacteristicsScheduledQuery();
+        if (0) this.startCharacteristicsScheduledQuery();
     }
 
     private async startBluetoothStatusScheduledQuery() {
