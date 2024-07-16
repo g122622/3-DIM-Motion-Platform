@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 01:12:00
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-11 13:46:08
+ * Last Modified: 2024-07-16 18:39:53
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -26,7 +26,7 @@ export const useConfigStore = defineStore("Config", {
             }
         },
         CommandConfig: {
-            batchSize: 16,
+            batchSize: 8,
             preprocessors: {
                 coordinateOffset: {
                     x: 0,
@@ -40,7 +40,7 @@ export const useConfigStore = defineStore("Config", {
             },
             autosend: {
                 autoSend: true,
-                autoSendCheckInterval: 9000,
+                autoSendCheckInterval: 3500,
                 autoSendHighThreshold: 32, // 自动发送高阈值，发送的最后一条指令编号减去接收端正在执行的指令编号大于等于该值时，停止发送新的batch
                 autoSendLowThreshold: 16 // 自动发送低阈值，发送的最后一条指令编号减去接收端正在执行的指令编号小于该值时，开始发送新的batch
             }

@@ -97,13 +97,13 @@
         <a-space>
             抬笔：
             <a-input-number v-model:value="stores.config.PenConfig.liftAngle" aria-placeholder="抬笔角度：" addon-after="度"
-                style="width: 100px" type="number" />
+                style="width: 100px" type="number" step="0.1" />
             落笔：
             <a-input-number v-model:value="stores.config.PenConfig.dropAngle" aria-placeholder="落笔角度：" addon-after="度"
-                style="width: 100px" type="number" />
+                style="width: 100px" type="number" step="0.1" />
             当前：
             <a-input-number v-model:value="stores.config.PenConfig.currentAngle" aria-placeholder="当前角度："
-                addon-after="度" style="width: 100px" type="number" />
+                addon-after="度" style="width: 100px" type="number" step="0.1" />
             <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitPenConfig()">
                 🚀提交
             </a-button>
