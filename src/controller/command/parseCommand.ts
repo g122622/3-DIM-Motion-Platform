@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 16:02:05
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 18:39:57
+ * Last Modified: 2024-07-17 14:32:57
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -16,8 +16,8 @@ import Command from "./types/Command";
 import { stores } from "@/stores";
 
 let multiplier = 1; // 单位倍率。毫米为1，英寸为25.4
+
 function extractGCodeParameters(gCode: string) {
-    // 调整正则表达式，确保更严格地匹配并捕获每个参数及之后的数字
     const regex = /([XYFP])(-?\d+(\.\d+)?)/g;
     let match;
     const parameters: { [key: string]: number | undefined } = {
@@ -69,7 +69,7 @@ export default function parseCommand(strIn: string): Command[] {
                 params = extractGCodeParameters(parts[1]); // 获取参数
                 ret.push({
                     opCode: 0x00,
-                    args: [params["X"], params["Y"], undefined],
+                    args: [params["X"], params["Y"]],
                     originalGcode: line,
                     commandNumber
                 });
@@ -80,7 +80,7 @@ export default function parseCommand(strIn: string): Command[] {
                 params = extractGCodeParameters(parts[1]); // 获取参数
                 ret.push({
                     opCode: 0x01,
-                    args: [params["X"], params["Y"], undefined],
+                    args: [params["X"], params["Y"]],
                     originalGcode: line,
                     commandNumber
                 });
@@ -91,7 +91,7 @@ export default function parseCommand(strIn: string): Command[] {
                 params = extractGCodeParameters(parts[1]); // 获取参数
                 ret.push({
                     opCode: 0x04,
-                    args: [params["P"], undefined, undefined],
+                    args: [params["P"], undefined],
                     originalGcode: line,
                     commandNumber
                 });
@@ -101,7 +101,7 @@ export default function parseCommand(strIn: string): Command[] {
             case "M5": // 主轴停止
                 ret.push({
                     opCode: 0x05,
-                    args: [undefined, undefined, undefined],
+                    args: [undefined, undefined],
                     originalGcode: line,
                     commandNumber
                 });

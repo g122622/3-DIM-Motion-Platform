@@ -9,8 +9,7 @@
             <a-tag color="#2db7f5">No. {{ item.commandNumber }}</a-tag>
             <a-tag color="#2db7f5">opCode: {{ item.opCode }}</a-tag>
             <a-tag color="#2db7f5">参数: {{ item.args[0]?.toFixed(2) || 'null' }}, {{ item.args[1]?.toFixed(2) || 'null'
-                }}, {{
-                    item.args[2]?.toFixed(2) || 'null' }}</a-tag>
+                }}</a-tag>
             <br />
             <a-tag color="blue" style="margin-top: 10px;">原始G代码：{{ item.originalGcode }}</a-tag>
         </div>
