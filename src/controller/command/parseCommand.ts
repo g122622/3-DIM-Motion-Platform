@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 16:02:05
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-17 14:32:57
+ * Last Modified: 2024-07-17 23:54:49
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -98,7 +98,7 @@ export default function parseCommand(strIn: string): Command[] {
                 shouldNumberIncrement = true;
                 break;
 
-            case "M5": // 主轴停止
+            case "M5": // 主轴停止（抬笔）
                 ret.push({
                     opCode: 0x05,
                     args: [undefined, undefined],
@@ -108,11 +108,17 @@ export default function parseCommand(strIn: string): Command[] {
                 shouldNumberIncrement = true;
                 break;
 
-            case "F1500": // 无效指令
-                shouldNumberIncrement = false;
+            case "M3S1000.0": // 主轴启动（落笔）
+                ret.push({
+                    opCode: 0x03,
+                    args: [undefined, undefined],
+                    originalGcode: line,
+                    commandNumber
+                });
+                shouldNumberIncrement = true;
                 break;
 
-            case "M3S1000.0": // 无效指令
+            case "F1500": // 无效指令
                 shouldNumberIncrement = false;
                 break;
 
