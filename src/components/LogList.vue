@@ -21,7 +21,7 @@ import { stores } from '@/stores'
 
 <style scoped>
 #log-list-container {
-    height: 570px;
+    height: 450px;
     overflow-y: scroll;
 }
 </style>

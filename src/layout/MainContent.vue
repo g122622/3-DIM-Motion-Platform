@@ -8,6 +8,7 @@
         </a-col>
         <a-col :span="6">
             <LogList />
+            <SystemStatus />
         </a-col>
     </a-row>
 </template>
@@ -16,4 +17,6 @@
 import CommandList from "@/components/CommandList.vue";
 import ControllPanel from "@/components/ControllPanel.vue";
 import LogList from "@/components/LogList.vue";
+import SystemStatus from "@/components/SystemStatus.vue";
+
 </script>

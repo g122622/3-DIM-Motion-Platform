@@ -8,6 +8,16 @@
             <a-button type="primary" @click="clearCommandList()" danger>🗑︎手动清空发送缓冲区</a-button>
         </a-space>
         <a-space>
+            <a-button type="primary" @click="moveToPosition()">✨️移动到坐标</a-button>
+            X轴：
+            <a-input-number v-model:value="moveToPositionSetting.x" aria-placeholder="X轴偏移量：" addon-after="mm"
+                style="width: 100px" />
+            Y轴：
+            <a-input-number v-model:value="moveToPositionSetting.y" aria-placeholder="Y轴偏移量：" addon-after="mm"
+                style="width: 100px" />
+            <a-checkbox v-model:checked="moveToPositionSetting.pendown">落笔</a-checkbox>
+        </a-space>
+        <a-space>
             <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitCommand()">
                 🚀发送命令batch
             </a-button>
@@ -108,33 +118,12 @@
                 🚀提交
             </a-button>
         </a-space>
-
-        <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">系统状态:</h4>
-        <a-space>
-            实时坐标：
-            X轴：
-            <a-tag color="#2db7f5">X= {{ stores.data.realtimePos.x.toFixed(3) }}</a-tag>
-            Y轴：
-            <a-tag color="#2db7f5">Y= {{ stores.data.realtimePos.y.toFixed(3) }}</a-tag>
-            Z轴/笔尖状态：
-            <a-tag color="#2db7f5">Z= {{ stores.data.realtimePos.z.toFixed(3) }}</a-tag>
-        </a-space>
-        <a-space>
-            电源电压：
-            <a-tag color="#2db7f5">{{ stores.data.BMS.batteryVoltage.toFixed(3) }}V</a-tag>
-        </a-space>
-        <a-space>
-            当前执行指令编号：
-            <a-tag color="#2db7f5">{{ stores.data.commandCounter.currentCommandNumber }}</a-tag>
-            累计执行指令数量：
-            <a-tag color="#2db7f5">{{ stores.data.commandCounter.executedCommandCount }}</a-tag>
-        </a-space>
     </a-space>
 </template>
 
 <script setup lang="ts">
 import { stores } from '@/stores';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 
 function fillCommandList() {
     if (stores.data.commandToSend.length > 0) {
@@ -158,6 +147,29 @@ const clearCommandList = () => {
 
 const autoApplyPreprocessors = ref(true);
 const autoSavePreprocessorsConfig = true;
+const moveToPosition = () => {
+    clearCommandList()
+    stores.data.commandToSend.push({
+        opCode: moveToPositionSetting.pendown ? 1 : 0,
+        args: [moveToPositionSetting.x, moveToPositionSetting.y],
+        commandNumber: 0,
+        originalGcode: ""
+    })
+    for (let i = 0; i < stores.config.CommandConfig.batchSize - 1; i++) {
+        stores.data.commandToSend.push({
+            opCode: 4,
+            args: [0.01, 0],
+            commandNumber: i + 1,
+            originalGcode: ""
+        })
+    }
+    stores.bluetooth.bluetoothController.submitCommand();
+}
+const moveToPositionSetting = reactive({
+    x: 0,
+    y: 0,
+    pendown: false
+})
 
 const applyPreprocessors = () => {
     const commands = stores.data.commandToSend;
