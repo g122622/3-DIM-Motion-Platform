@@ -2,6 +2,7 @@
     <a-row style="height: 100%;">
         <a-col :span="7">
             <CommandList />
+            <TraceCanvas />
         </a-col>
         <a-col :span="11">
             <ControllPanel />
@@ -18,5 +19,6 @@ import CommandList from "@/components/CommandList.vue";
 import ControllPanel from "@/components/ControllPanel.vue";
 import LogList from "@/components/LogList.vue";
 import SystemStatus from "@/components/SystemStatus.vue";
+import TraceCanvas from "@/components/TraceCanvas.vue";
 
 </script>

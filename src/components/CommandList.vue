@@ -10,8 +10,6 @@
             <a-tag color="#2db7f5">opCode: {{ item.opCode }}</a-tag>
             <a-tag color="#2db7f5">参数: {{ item.args[0]?.toFixed(2) || 'null' }}, {{ item.args[1]?.toFixed(2) || 'null'
                 }}</a-tag>
-            <br />
-            <a-tag color="blue" style="margin-top: 10px;">原始G代码：{{ item.originalGcode }}</a-tag>
         </div>
     </div>
 </template>
@@ -24,7 +22,7 @@ import { stores } from '@/stores';
 <style scoped>
 #list {
     width: calc(100% - 20px);
-    height: 570px;
+    height: 250px;
     overflow-y: scroll;
 }
 

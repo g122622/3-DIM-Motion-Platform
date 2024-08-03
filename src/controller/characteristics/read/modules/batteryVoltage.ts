@@ -4,7 +4,7 @@
  * Created Date: 2024-04-27 15:14:31
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 18:34:27
+ * Last Modified: 2024-08-01 11:21:03
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -22,7 +22,7 @@ const batteryVoltage: Characteristic = {
     async successHandler(characteristic) {
         const dataView = await characteristic.readValue();
         // 处理数据，并且更新到全局状态存储中
-        stores.data.BMS.batteryVoltage = dataView.getInt32(0, true);
+        stores.data.BMS.batteryVoltage = dataView.getFloat32(0, true);
     },
     errorHandler: noop,
     queryInterval: 500

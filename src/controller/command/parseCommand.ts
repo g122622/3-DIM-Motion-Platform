@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 16:02:05
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-17 23:54:49
+ * Last Modified: 2024-08-03 15:40:42
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -70,7 +70,6 @@ export default function parseCommand(strIn: string): Command[] {
                 ret.push({
                     opCode: 0x00,
                     args: [params["X"], params["Y"]],
-                    originalGcode: line,
                     commandNumber
                 });
                 shouldNumberIncrement = true;
@@ -81,7 +80,6 @@ export default function parseCommand(strIn: string): Command[] {
                 ret.push({
                     opCode: 0x01,
                     args: [params["X"], params["Y"]],
-                    originalGcode: line,
                     commandNumber
                 });
                 shouldNumberIncrement = true;
@@ -92,7 +90,6 @@ export default function parseCommand(strIn: string): Command[] {
                 ret.push({
                     opCode: 0x04,
                     args: [params["P"], undefined],
-                    originalGcode: line,
                     commandNumber
                 });
                 shouldNumberIncrement = true;
@@ -102,7 +99,6 @@ export default function parseCommand(strIn: string): Command[] {
                 ret.push({
                     opCode: 0x05,
                     args: [undefined, undefined],
-                    originalGcode: line,
                     commandNumber
                 });
                 shouldNumberIncrement = true;
@@ -112,7 +108,6 @@ export default function parseCommand(strIn: string): Command[] {
                 ret.push({
                     opCode: 0x03,
                     args: [undefined, undefined],
-                    originalGcode: line,
                     commandNumber
                 });
                 shouldNumberIncrement = true;

@@ -2,29 +2,40 @@
     <a-space direction="vertical">
         <h4 style="margin-bottom: 10px; font-weight: bold">缓冲区操作:</h4>
         <a-space>
-            <a-button type="primary" @click="fillCommandList()">📄从总队列中填充</a-button>
+            <a-button type="primary" @click="fillCommandList()"
+                :disabled="stores.config.CommandConfig.autosend.autoSend">📄从总队列中填充</a-button>
             <a-input-number v-model:value="stores.config.CommandConfig.batchSize" aria-placeholder="任务批次大小："
-                addon-after="条" style="width: 100px" type="number" />
-            <a-button type="primary" @click="clearCommandList()" danger>🗑︎手动清空发送缓冲区</a-button>
+                addon-after="条" style="width: 100px" type="number"
+                :disabled="stores.config.CommandConfig.autosend.autoSend" />
+            <a-button type="primary" @click="clearCommandList()" danger
+                :disabled="stores.config.CommandConfig.autosend.autoSend">🗑︎手动清空发送缓冲区</a-button>
         </a-space>
         <a-space>
-            <a-button type="primary" @click="moveToPosition()">✨️移动到坐标</a-button>
+            <a-button type="primary" @click="moveToPosition()"
+                :disabled="stores.config.CommandConfig.autosend.autoSend">✨️移动到坐标</a-button>
             X轴：
             <a-input-number v-model:value="moveToPositionSetting.x" aria-placeholder="X轴偏移量：" addon-after="mm"
-                style="width: 100px" />
+                style="width: 100px" :disabled="stores.config.CommandConfig.autosend.autoSend" />
             Y轴：
             <a-input-number v-model:value="moveToPositionSetting.y" aria-placeholder="Y轴偏移量：" addon-after="mm"
-                style="width: 100px" />
-            <a-checkbox v-model:checked="moveToPositionSetting.pendown">落笔</a-checkbox>
+                style="width: 100px" :disabled="stores.config.CommandConfig.autosend.autoSend" />
+            <a-checkbox v-model:checked="moveToPositionSetting.pendown"
+                :disabled="stores.config.CommandConfig.autosend.autoSend">落笔</a-checkbox>
         </a-space>
         <a-space>
-            <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitCommand()">
-                🚀发送命令batch
+            <a-button type="primary" danger @click="stores.bluetooth.bluetoothController.submitCommand()"
+                :disabled="stores.config.CommandConfig.autosend.autoSend">
+                🚀手动发送命令batch
             </a-button>
-            <a-checkbox v-model:checked="stores.config.CommandConfig.autosend.autoSend">自动发送命令</a-checkbox>
+            <a-checkbox v-model:checked="stores.config.CommandConfig.autosend.autoSend">自动发送命令模式</a-checkbox>
+        </a-space>
+        <a-space>
             自动发送检查间隔：
             <a-input-number v-model:value="stores.config.CommandConfig.autosend.autoSendCheckInterval"
                 aria-placeholder="自动发送检查间隔：" addon-after="ms" style="width: 100px" type="number" />
+            自动发送阈值：
+            <a-input-number v-model:value="stores.config.CommandConfig.autosend.autoSendLowThreshold"
+                aria-placeholder="自动发送阈值：" addon-after="条" style="width: 100px" type="number" />
         </a-space>
 
         <h4 style="margin-bottom: 10px; margin-top: 10px;font-weight: bold">命令预处理:</h4>
@@ -41,10 +52,10 @@
             坐标缩放预处理器：
             X轴：
             <a-input-number v-model:value="stores.config.CommandConfig.preprocessors.coordinateScale.x"
-                aria-placeholder="X轴缩放：" addon-after="倍" style="width: 100px" />
+                aria-placeholder="X轴缩放：" addon-after="倍" style="width: 100px" step="0.05" />
             Y轴：
             <a-input-number v-model:value="stores.config.CommandConfig.preprocessors.coordinateScale.y"
-                aria-placeholder="Y轴缩放：" addon-after="倍" style="width: 100px" />
+                aria-placeholder="Y轴缩放：" addon-after="倍" style="width: 100px" step="0.05" />
         </a-space>
         <a-space>
             XY反转预处理器：
@@ -153,14 +164,12 @@ const moveToPosition = () => {
         opCode: moveToPositionSetting.pendown ? 1 : 0,
         args: [moveToPositionSetting.x, moveToPositionSetting.y],
         commandNumber: 0,
-        originalGcode: ""
     })
     for (let i = 0; i < stores.config.CommandConfig.batchSize - 1; i++) {
         stores.data.commandToSend.push({
             opCode: 4,
             args: [0.01, 0],
             commandNumber: i + 1,
-            originalGcode: ""
         })
     }
     stores.bluetooth.bluetoothController.submitCommand();
@@ -200,9 +209,18 @@ onMounted(() => {
     // 自动发送命令
     setInterval(() => {
         if (stores.config.CommandConfig.autosend.autoSend) {
-            clearCommandList();
-            fillCommandList();
-            stores.bluetooth.bluetoothController.submitCommand();
+            if (stores.data.commandToSend.length > 0) {
+                const maxNumber = Math.max(...stores.data.commandToSend.map(c => c.commandNumber));
+                if (maxNumber - stores.data.commandCounter.currentCommandNumber > 0
+                    && maxNumber - stores.data.commandCounter.currentCommandNumber < stores.config.CommandConfig.autosend.autoSendLowThreshold) {
+                    clearCommandList();
+                    fillCommandList();
+                    stores.bluetooth.bluetoothController.submitCommand();
+                }
+            } else {
+                fillCommandList();
+                stores.bluetooth.bluetoothController.submitCommand();
+            }
         }
     }, stores.config.CommandConfig.autosend.autoSendCheckInterval)
 

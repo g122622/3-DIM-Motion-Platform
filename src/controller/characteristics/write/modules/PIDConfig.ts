@@ -4,7 +4,7 @@
  * Created Date: 2024-07-09 13:59:58
  * Author: Guoyi
  * -----
- * Last Modified: 2024-07-09 18:35:13
+ * Last Modified: 2024-08-03 10:44:26
  * Modified By: Guoyi
  * -----
  * Copyright (c) 2024 Guoyi Inc.
@@ -22,7 +22,6 @@ const PIDConfig: Characteristic = {
     async successHandler(characteristic) {
         // stores.config.PIDConfig.length个PID配置，每个配置含5个float数据，每个float数据4个字节
         const dataView = new DataView(new ArrayBuffer(stores.config.PIDConfig.length * 5 * 4));
-        console.log(dataView.byteLength);
         for (let i = 0; i < stores.config.PIDConfig.length; i++) {
             dataView.setFloat32(0 + 20 * i, stores.config.PIDConfig[i].Kp, true);
             dataView.setFloat32(4 + 20 * i, stores.config.PIDConfig[i].Ki, true);
