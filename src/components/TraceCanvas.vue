@@ -14,14 +14,14 @@ import { ref, onMounted, watchEffect } from 'vue';
 
 const canvas = ref<HTMLCanvasElement>();
 
-const paperWidthBase = 103;
+const paperWidthBase = 105;
 const paperWidth = 2 * paperWidthBase;
 const paperHeight = 3 * paperWidthBase;
 const paperStartX = (350 - paperWidth) / 2;
 const paperStartY = (350 - paperHeight) / 2;
 
 onMounted(() => {
-    clearTrace();
+    clearTraceAndInitPaperAndCoord();
 });
 
 watchEffect(() => {
@@ -30,7 +30,7 @@ watchEffect(() => {
     }
 });
 
-const clearTrace = () => {
+const clearTraceAndInitPaperAndCoord = () => {
     if (!canvas.value) {
         stores.logger.log('canvas 初始化失败', 'error');
         return;
@@ -41,11 +41,46 @@ const clearTrace = () => {
         return;
     }
 
+    ctx.lineWidth = 0.7;
     ctx.fillStyle = 'rgb(230, 230, 230)';
     ctx.fillRect(0, 0, 350, 350);
     ctx.fillStyle = 'rgb(255, 251, 230)';
     // 绘制一个宽高比为2:3的矩形，用来代表纸张
     ctx.fillRect(paperStartX, paperStartY, paperWidth, paperHeight);
+
+    // 绘制坐标系
+    drawCoordinateSystem();
+}
+
+// 绘制坐标系
+const drawCoordinateSystem = () => {
+    if (!canvas.value) {
+        return;
+    }
+    const ctx = canvas.value.getContext('2d');
+    if (!ctx) {
+        stores.logger.log('canvas 获取 context 失败', 'error');
+        return;
+    }
+
+    // 绘制坐标系，在纸张边缘绘制一系列短线，长度为5像素，用来表示坐标刻度
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgb(255, 0, 0)';
+    for (let i = 0; i <= 14; i++) {
+        const x = paperStartX + i * (paperWidth / 14);
+        const y = paperStartY + paperHeight;
+        ctx.moveTo(x, y + 5);
+        ctx.lineTo(x, y);
+    }
+    for (let i = 0; i <= 21; i++) {
+        const x = paperStartX;
+        const y = paperStartY + i * (paperHeight / 21);
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - 5, y);
+    }
+    ctx.stroke();
+    ctx.closePath();
+
 }
 
 const drawTrace = () => {
@@ -58,7 +93,7 @@ const drawTrace = () => {
         return;
     }
 
-    clearTrace();
+    clearTraceAndInitPaperAndCoord();
 
     ctx.beginPath();
     ctx.strokeStyle = 'rgb(0, 0, 0)';
